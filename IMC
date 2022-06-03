@@ -1,0 +1,38 @@
+from PySimpleGUI import PySimpleGUI as sg
+
+# Layout
+from numpy import size
+
+sg.theme('Reddit')
+layout = [
+    [sg.Text('Peso: kg'), sg.Input(key='peso', size=(10, 1))],
+    [sg.Text('Altura: m'), sg.Input(key='altura', size=(10, 1))],
+    [sg.Button('Calcular IMC')],
+    [sg.Text('', key='texto_imc')]
+]
+
+# Janela
+janela = sg.Window('Calculo de IMC', layout)
+
+while True:
+    evento, valores = janela.read()
+    if evento == sg.WIN_CLOSED:
+        break
+    if evento == 'Calcular IMC':
+        peso = float(valores['peso'])
+        altura = float(valores['altura'])
+        imc = peso / (altura ** 2)
+
+        if imc < 18.5:
+            janela["texto_imc"].update(f'Abaixo do Peso!, IMC:{imc:.5} kg/m²')
+        elif 18 <= imc < 25:
+            janela["texto_imc"].update(f'Peso ideal, IMC:{imc:.5} kg/m²')
+        elif 25 <= imc < 30:
+            janela["texto_imc"].update(f'Sobrepeso, IMC:{imc:.5} kg/m²')
+        elif 30 <= imc < 40:
+            janela["texto_imc"].update(f'Obesidade, IMC:{imc:.5} kg/m²')
+        else:
+            janela["texto_imc"].update(f'Obesidade mórbida, IMC:{imc:.5} kg/m²')
+
+janela.close()
+
